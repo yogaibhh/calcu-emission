@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>KALMISI: Kalkulator Beban Emisi</title>
+    <link rel="stylesheet" type="text/css" href="Rev-nyoba-updated.css">
+  </head>
+  <body>
+    <header>
+        <h1>KALMISI: KALKULATOR BEBAN EMISI</h1>
+        <div id="mode-toggle">
+            <label class="switch">
+                <input type="checkbox" id="toggle-mode">
+                <span class="slider round"></span>
+            </label>
+        </div>
+    </header>
+    <main>
+        <h2>Pencemaran Udara di Indonesia</h2>
+        <img src="pencemaran-udara.jpg" alt="Ilustrasi Pencemaran Udara" style="border: 1px solid black; display: block; margin: 0 auto;"height="300" width="300">
+        <p style="text-align: center;">Pencemaran udara adalah suatu masalah yang semakin memburuk 
+                di Indonesia dalam beberapa tahun terakhir. 
+                Akibat dari aktivitas manusia seperti pembakaran bahan bakar fosil pada kendaraan 
+                dan industri, kualitas udara di beberapa wilayah di Indonesia sangat buruk 
+                dan membahayakan bagi kesehatan masyarakat. Emisi kendaraan merupakan 
+                salah satu sumber utama pencemaran udara di Indonesia.</p> 
+                
+                <p style="text-align: center;"> Oleh karena itu, kami 
+                membuat alat untuk menghitung beban emisi dari kendaraan.</p>  
+                <nav>
+                  <ul>
+                    <li><a href="Perhitungan.html">Modul Perhitungan</a></li>
+                  </ul>
+                </nav>
+                <h1>Kalkulator Faktor Emisi CO2 Kendaraan</h1>
+                <form>
+                  <label for="jenis">Jenis Kendaraan:</label>
+                  <select id="jenis" name="jenis">
+                    <option value="solar">Mobil Berbahan Bakar Solar</option>
+                    <option value="bensin">Mobil Berbahan Bakar Bensin</option>
+                    <option value="motor">Sepeda Motor</option>
+                  </select><br><br>
+                  <label for="jarak">VKT:</label>
+                  <input type="number" id="jarak" name="jarak"><br><br>
+                  <input type="submit" value="Hitung" onclick="calculate(event)">
+                </form>
+                <p id="hasil"></p>
+                <script>
+                  function calculate(event) {
+                    event.preventDefault();
+                    const jenis = document.getElementById("jenis").value;
+                    const jarak = document.getElementById("jarak").value;
+                    let konversi, massaJenis;
+                    if (jenis === "solar") {
+                      konversi = 9;
+                      massaJenis = 0.82;
+                    } else if (jenis === "bensin") {
+                      konversi = 10;
+                      massaJenis = 0.77;
+                    } else if (jenis === "motor") {
+                      konversi = 48;
+                      massaJenis = 0.77; // assuming same as for gasoline
+                    }
+                    const literBbm = jarak / konversi;
+                    const massaBbm = literBbm * massaJenis;
+                    const massaCo2 = massaBbm * 3172; // grams of CO2 per kg of fuel
+                    const konversiText = `Konversi total jarak perjalanan ke dalam liter bahan bakar: ${literBbm.toFixed(2)} liter`;
+                    const massaBbmText = `Menghitung massa bahan bakar: ${massaBbm.toFixed(2)} kg`;
+                    const massaCo2Text = `Menghitung faktor emisi: = ${(massaCo2).toFixed(2)} gram CO2.`;
+                    document.getElementById("hasil").innerHTML = `${konversiText}<br>${massaBbmText}<br>${massaCo2Text}`;
+                  }
+                </script>
+        <div class="emission-calculator">
+            <h3>Mencari Beban Emisi</h3>
+            <div class="input-field">
+              <label for="jenis-kendaraan">Jenis Kendaraan:</label>
+              <select id="jenis-kendaraan" name="vehicle-type">
+                <option value="motor">Motor</option>
+                <option value="mobil">Mobil</option>
+                <option value="truk">Truk</option>
+                <option value="bus">Bus</option>
+              </select>
+            </div>
+
+            <div class="input-field">
+              <label for="jenis-polutan">Jenis Polutan:</label>
+              <select id="jenis-polutan" name="emission-type">
+                <option value="CO2">CO2</option>
+                <option value="PM10">PM10</option>
+                <option value="SO2">SO2</option>
+                <option value="CO">CO</option>
+                <option value="NOx">NOx</option>
+              </select>
+            </div>
+            
+            <div class="input-fields">
+              <div class="input-field">
+                <label for="volume-kendaraan">Volume Kendaraan (kendaraan/jam):</label>
+                <input type="number" id="volume-kendaraan" name="volume-kendaraan">
+              </div>
+              <div class="input-field">
+                <label for="vkt">VKT (km):</label>
+                <input type="number" id="vkt" name="vkt">
+              </div>
+              <div class="input-field">
+                <label for="fe">FE (g/km/kendaraan):</label>
+                <input type="number" id="fe" name="fe">
+              </div>
+              <div class="input-field">
+                <label for="emission">Emission (kg/jam):</label>
+                <input type="number" id="emission" name="emission" disabled style="width: 100%; padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #333; margin-top: 10px;">
+              </div>
+            </div>
+            <button id="calculate-emission">Hitung Beban Emisi</button>
+          </div>
+<div class="csv-upload">
+  <input type="file" id="csvFileInput" accept=".csv">
+  <label for="csvFileInput">Choose CSV File</label>
+  <button id="importButton">Import CSV</button>
+</div>
+
+          <div class="emission-history">
+            <h3>Riwayat Hasil Perhitungan</h3>
+            <table id="emission-history-table">
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Jenis Kendaraan</th>
+                  <th>Jenis Polutan</th>
+                  <th>Volume Kendaraan</th>
+                  <th>VKT</th>
+                  <th>FE</th>
+                  <th>Emission</th>
+                </tr>
+              </thead>
+              <tbody id="emission-history-body"></tbody>
+            </table>            
+            <button id="download-csv">Download as CSV</button>
+            <button class="chatbot-button">Chat with a chatbot</button>
+          </div>
+          <button id="toggleButton" onclick="toggleGraph()">Show Graph</button>
+          <div id="chartContainer" style="display: none;">
+          <head>
+            <h3>Grafik Perhitungan Polutan</h3>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+          </head>
+          <body>
+            <div id="chart-container">
+              <canvas id="myChart"></canvas>
+            </div>
+    </main>
+      <script src="Projek PU.js"></script>
+    <footer>
+      <p>Copyright &copy; yoga.ibh</p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Modul Perhitungan</title>
+    <link rel="stylesheet" type="text/css" href="hitung.css">
+  </head>
+  <body>
+    <header>
+      <h1>Modul Perhitungan</h1>
+    </header>
+    <a href="index.html" class="back-button">Kembali ke Menu Utama</a>
+    <h2>Variabel Perhitungan</h2>
+    <div class="box">
+      <div class="label">E:</div>
+      <div>Beban emisi dalam ton per tahun yang dihasilkan oleh kendaraan.</div>
+    </div>
+    <div class="box">
+      <div class="label">VKT:</div>
+      <div>Total jarak yang ditempuh oleh kendaraan dalam kilometer dalam satu tahun.</div>
+    </div>
+    <div class="box">
+      <div class="label">Volume kendaraan:</div>
+      <div>Jumlah kendaraan dari masing-masing jenis bahan bakar yang melintasi suatu wilayah dalam satu satuan waktu</div>
+    </div>
+    <div class="box">
+      <div class="label">FE:</div>
+      <div>Faktor emisi yang diukur dalam gram per kilometer per kendaraan.</div>
+      <div>Faktor ini merepresentasikan jumlah emisi yang dihasilkan oleh kendaraan dalam satu kilometer per liter bahan bakar yang digunakan oleh kendaraan.</div>
+    </div>
+    <h2>Cara perhitungan CO2 untuk kendaraan</h2>
+    <div class="box">
+      <div class="label">Konsumsi bahan bakar mobil berbahan bakar solar:</div>
+      <div>Rata-rata dalam kota sebesar 9 km/liter</div>
+      <div>Massa jenis solar sebesar 0,82 kg/liter</div>
+    </div>
+    <div class="box">
+      <div class="label">Konsumsi bahan bakar mobil berbahan bakar bensin:</div>
+      <div>Rata-rata dalam kota sebesar 10 km/liter</div>
+      <div>Massa jenis pertalite sebesar 0,77 kg/liter</div>
+    </div>
+    <div class="box">
+      <div class="label">Konsumsi bahan bakar sepeda motor:</div>
+      <div>Rata-rata dalam kota sebesar 48 km/liter</div>
+    </div>
+    <button onclick="toggleExample()">Contoh Perhitungan</button>
+    <div id="example" style="display: none;">
+    <p>Maka untuk menentukan beban emisi polutan CO2 untuk kendaraan mobil berbahan bakar solar:</p>
+      <ol>
+        <li>Konversi total jarak perjalanan ke dalam liter bahan bakar: 9 km = 1 liter, 0,2195 km = x liter, maka x = 0,0243 liter</li>
+        <li>Menghitung massa bahan bakar: 0,0243 liter x 0,82 kg/liter = 0,02 kg</li>
+        <li>Menghitung faktor emisi: 1 kg = 3172 gram, 0,02 kg = x gram, maka x = 63,44 gram</li>
+        <li>Menghitung beban emisi CO2: 
+          E = Volume kendaraan x VKT x FE x 10^-6, 
+          E = 29862 kend/tahun x 0,2193 km x 63,44 x 10-6, 
+          E = 0,4154 ton/tahun</li>
+      </ol>
+    </div>
+    <script>
+      function toggleExample() {
+        var x = document.getElementById("example");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      }
+    </script>
+   <h1>Kalkulator Faktor Emisi CO2 Kendaraan</h1>
+    <form>
+      <label for="jenis">Jenis Kendaraan:</label>
+      <select id="jenis" name="jenis">
+        <option value="solar">Mobil Berbahan Bakar Solar</option>
+        <option value="bensin">Mobil Berbahan Bakar Bensin</option>
+        <option value="motor">Sepeda Motor</option>
+      </select><br><br>
+      <label for="jarak">Total Jarak Perjalanan (KM):</label>
+      <input type="number" id="jarak" name="jarak"><br><br>
+      <input type="submit" value="Hitung" onclick="calculate(event)">
+    </form>
+    <p id="hasil"></p>
+    <script>
+      function calculate(event) {
+        event.preventDefault();
+        const jenis = document.getElementById("jenis").value;
+        const jarak = document.getElementById("jarak").value;
+        let konversi, massaJenis;
+        if (jenis === "solar") {
+          konversi = 9;
+          massaJenis = 0.82;
+        } else if (jenis === "bensin") {
+          konversi = 10;
+          massaJenis = 0.77;
+        } else if (jenis === "motor") {
+          konversi = 48;
+          massaJenis = 0.77; // assuming same as for gasoline
+        }
+        const literBbm = jarak / konversi;
+        const massaBbm = literBbm * massaJenis;
+        const massaCo2 = massaBbm * 3172; // grams of CO2 per kg of fuel
+        const konversiText = `Konversi total jarak perjalanan ke dalam liter bahan bakar: ${literBbm.toFixed(2)} liter`;
+        const massaBbmText = `Menghitung massa bahan bakar: ${massaBbm.toFixed(2)} kg`;
+        const massaCo2Text = `Menghitung faktor emisi: = ${(massaCo2).toFixed(2)} gram CO2.`;
+        document.getElementById("hasil").innerHTML = `${konversiText}<br>${massaBbmText}<br>${massaCo2Text}`;
+      }
+    </script>
+    <footer>
+      <p>Copyright &copy; 2023 Kelompok 4</p>
+    </footer>
+  </body>
+</html>
